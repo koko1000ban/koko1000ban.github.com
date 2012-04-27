@@ -301,7 +301,14 @@ task :setup_github_pages, :repo do |t, args|
   else
     repo_url = get_stdin("Enter the read/write url for your repository: ")
   end
-  user = repo_url.match(/:([^\/]+)/)[1]
+
+  regexp_user = case repo_url
+                when /^http/
+                  /\/([^\/]+)@/
+                else
+                  /:([^\/]+)/
+                end
+  user = repo_url.match(regexp_user)[1]
   branch = (repo_url.match(/\/[\w-]+.github.com/).nil?) ? 'gh-pages' : 'master'
   project = (branch == 'gh-pages') ? repo_url.match(/\/([^\.]+)/)[1] : ''
   unless `git remote -v`.match(/origin.+?octopress.git/).nil?
