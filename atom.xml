@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Tabito Note]]></title>
+  <title><![CDATA[旅人]]></title>
   <link href="http://koko1000ban.github.com/atom.xml" rel="self"/>
   <link href="http://koko1000ban.github.com/"/>
-  <updated>2012-04-27T23:55:33+09:00</updated>
+  <updated>2012-04-30T23:34:28+09:00</updated>
   <id>http://koko1000ban.github.com/</id>
   <author>
     <name><![CDATA[Tabito Ohtani]]></name>
