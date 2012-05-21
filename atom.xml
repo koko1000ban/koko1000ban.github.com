@@ -4,7 +4,7 @@
   <title><![CDATA[旅人]]></title>
   <link href="http://koko1000ban.github.com/atom.xml" rel="self"/>
   <link href="http://koko1000ban.github.com/"/>
-  <updated>2012-04-30T23:34:28+09:00</updated>
+  <updated>2012-05-21T15:55:51+09:00</updated>
   <id>http://koko1000ban.github.com/</id>
   <author>
     <name><![CDATA[Tabito Ohtani]]></name>
@@ -12,6 +12,64 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[C++プロダクトの継続監視ビルドとログレベルを用いたある程度柔軟な追いかけ方]]></title>
+    <link href="http://koko1000ban.github.com/blog/2012/05/21/cplusplus-build-log/"/>
+    <updated>2012-05-21T15:49:00+09:00</updated>
+    <id>http://koko1000ban.github.com/blog/2012/05/21/cplusplus-build-log</id>
+    <content type="html"><![CDATA[<p>コードリーディング&amp;開発,debug時とかに、C++のプロジェクトでどのように継続監視ビルドし、どうログ出力をしてコードを追いかけているかをまとめてみる.</p>
+
+<h2>使用するもの</h2>
+
+<ul>
+<li><a href="http://code.google.com/p/google-glog/">google-glog</a></li>
+<li>ruby
+
+<ul>
+<li><a href="https://github.com/mynyml/watchr">watchr</a></li>
+</ul>
+
+
+<p> rubyはrbenv, rvmなりで、watchrは<code>gem install watchr</code>で</p></li>
+</ul>
+
+
+<h2>ログレベルの設定とレベル毎のログ出力</h2>
+
+<p>glogのVLOGとvmoduleオプションを使う. ふつうのLOGとかDLOGもあるけど、vmoduleでの制御が便利だから使わない.<br/>
+vmoduleは、<a href="http://google-glog.googlecode.com/svn/trunk/doc/glog.html">ここ</a>にも書いてあるけど、&#8221;モジュール名=レベル値&#8221;って設定すると、そのモジュール内で指定した設定値より高位のものが解放されるかんじ.</p>
+
+<p>ex.)</p>
+
+<pre><code>--vmodule="db=2,engine=1,client_*=3"
+</code></pre>
+
+<p>だと、db.{h,cc}でVLOG(2)以上が、engine.{h,cc}でVLOG(1)以上が、client_*.{h,cc}でVLOG(3)以上が出力される.</p>
+
+<p>こうしてモジュールごとに分けてログ出力をさせることで、デバッグ時に局所的に追いかけたい場合にも対応できるし、同じグループとしてログをみたいような部分はだいたい同じモジュールとしてまとめておくべき部分であったりするので、構成がより適切にまとまっていくという嬉しい効果もあるとかないとか.</p>
+
+<h2>継続監視ビルド</h2>
+
+<p>watchrを使う. 下に書いてあることができるのなら、watchdogでもomakeでもwafでもなんでもいいと思う.<br/>
+設定はこんなかんじ:</p>
+
+<p>   <script src="https://gist.github.com/2760708.js"> </script></p>
+
+<p>run_test内は適宜変更<br/>
+ここではcmake使ってるけどこれもなんでもいいと思う.<br/>
+プロジェクト内のファイルが変更されるとコンパイル&amp;実行されるし、 <code>Ctrl+\</code>押しても実行できる.</p>
+
+<h2>例</h2>
+
+<p>foo.ccをいじくってて、その中で依存しているhoge.ccがどうもおかしいのでより詳細なログをおいかけたい場合、上記auto.watchrのrun_test内のログレベル設定している部分を</p>
+
+<pre><code>--vmodule='hoge=2,foo=2'
+</code></pre>
+
+<p>と変えると再度コンパイルされ、詳しく吐き出された出力内容を見て直す</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[helloworld]]></title>
